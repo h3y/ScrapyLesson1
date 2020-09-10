@@ -1,5 +1,4 @@
 import scrapy
-import re
 
 class BookSpider(scrapy.Spider):
 
@@ -23,7 +22,7 @@ class BookSpider(scrapy.Spider):
         product = response.xpath("//div[contains(@class,'product_main')]")
         rating_value = product.xpath("//p[contains(@class, 'star-rating')]").xpath('@class').extract_first().replace("star-rating", "").strip()
         return {
-            'title': product.xpath("/h1").extract_first(),
+            'title': product.xpath("//h1/text()").extract_first(),
             'rating': int(self.rating(rating_value)),
             'price': float(product.xpath('//p[@class="price_color"]/text()').extract_first().replace("£", "")),
             'stock': int(''.join(product.xpath('//p[@class="instock availability"]/text()').re('\d+'))),
